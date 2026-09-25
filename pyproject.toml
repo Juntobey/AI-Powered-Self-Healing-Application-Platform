@@ -1,0 +1,19 @@
+[project]
+name = "ai-powered-self-healing-application-platform"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Juntobey", email = "teelee0811@gmail" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+]
+
+[project.scripts]
+ai-powered-self-healing-application-platform = "ai_powered_self_healing_application_platform:main"
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"

@@ -33,25 +33,26 @@ resource "aws_vpc" "custom_main_vpc" {
 }
 
 # Public subnet 
-resource "aws_subnet" "public_subnet_234"{
-vpi_id = aws_vpc.custom_main_vpc.id
-cidr_block = "10.0.156.0/24"
-map_public_ip_on_launch =true
-availability_zone = data.aws_availability_zones.available.names[0]
+resource "aws_subnet" "public_subnet_234" {
+  vpi_id                  = aws_vpc.custom_main_vpc.id
+  cidr_block              = "10.0.156.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = data.aws_availability_zones.available.names[0]
 
-tags = {
-  Name = public_subnet_234
-}
+  tags = {
+    Name = public_subnet_234
+  }
 
 }
 
 # internet gateway
 resource "aws_internet_gateway" "custom_main_igw" {
-vpc_id = aws_vpc.custom_main_vpc.id
+  vpc_id = aws_vpc.custom_main_vpc.id
 
-tags = {
-Name = custom_main_igw
-}}
+  tags = {
+    Name = custom_main_igw
+  }
+}
 
 # route table
 resource "aws_route_table" "custom_main_rt" {
@@ -69,9 +70,29 @@ resource "aws_route_table" "custom_main_rt" {
 
 # route table association
 resource "aws_main_route_table_association" "custom_main_rt_assoca" {
-  subnet_id = aws_subnet.public_subnet_234.id
+  subnet_id      = aws_subnet.public_subnet_234.id
   route_table_id = aws_route_table.custom_main_rt.id
 }
+
+resource "aws_security_group" "ecs_playwright_sg"{
+name       = "ecs_playwright_sg"
+description = "Allows Playwright outbound browsing while blocking all inbound traffic"
+vpc_id = aws_vpc.custom_main_vpc.id
+
+ingress {
+}
+
+#outbound allows playwright to browse the web/fastapi and pull images
+egress{
+protocol = "-1"
+from_port = 0
+to_port = 0 
+cidr_blocks = ["0.0.0.0/0"]
+}
+
+}
+
+
 
 
 
